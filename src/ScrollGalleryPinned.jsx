@@ -191,81 +191,52 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const ScrollGalleryPinned = () => {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
-  const containerRef = useRef(null);
 
   useGSAP(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
-    const container = containerRef.current;
 
-    if (!section || !track || !container) return;
+    if (!section || !track) return;
 
-    // إعدادات مختلفة للجوال والكمبيوتر
-    const isMobile = window.innerWidth < 768;
-    
-    // حساب الأبعاد بناءً على نوع الجهاز
-    const trackWidth = track.scrollWidth;
-    const sectionWidth = section.offsetWidth;
-    const scrollDistance = trackWidth - sectionWidth;
+    const mm = gsap.matchMedia();
 
-    // إعدادات الـ ScrollTrigger للجوال
-    const scrollConfig = isMobile ? {
-      trigger: section,
-      start: "top top",
-      end: () => `+=${scrollDistance * 1.5}`,
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-      pinSpacing: false, // مهم للجوال - يمنع المسافات الزائدة
-      markers: false // ضع true للت debugging
-    } : {
-      trigger: section,
-      start: "top top",
-      end: () => `+=${scrollDistance * 2}`,
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-      markers: false
-    };
+    mm.add("(min-width: 0px)", () => {
+      const ctx = gsap.context(() => {
+        const horizontalAnimation = gsap.to(track, {
+          x: () => -Math.max(track.scrollWidth - section.offsetWidth, 0),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () =>
+              `+=${Math.max(track.scrollWidth - section.offsetWidth, 1)}`,
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            markers: false,
+          },
+        });
 
-    // animation للـ horizontal scroll
-    const horizontalAnimation = gsap.to(track, {
-      x: -scrollDistance,
-      ease: "none",
-      scrollTrigger: scrollConfig
+        return () => horizontalAnimation.scrollTrigger?.kill();
+      }, section);
+
+      return () => ctx.revert();
     });
 
-    // حل إضافي للجوال - تفعيل الـ scroll العمودي
-    if (isMobile) {
-      // جعل الـ section تأخذ مساحة أقل
-      gsap.set(section, {
-        minHeight: "60vh" // بدل 100vh لتقليل المساحة
-      });
-
-      // تفعيل الـ scroll العمودي داخل الـ section
-      section.style.overflow = "visible";
-    }
-
-    return () => {
-      horizontalAnimation.scrollTrigger?.kill();
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    return () => mm.revert();
   }, []);
 
   return (
     <>
       <section
         ref={sectionRef}
-        className="relative h-screen md:h-screen w-full overflow-hidden bg-gradient-to-br from-amber-900 via-gray-900 to-black"
-        style={{ 
-          minHeight: "60vh", // تقليل الارتفاع للجوال
-          height: "100vh" // الارتفاع الكامل للكمبيوتر
-        }}
+        className="relative h-screen w-full overflow-hidden bg-linear-to-br from-amber-900 via-gray-900 to-black"
       >
-        <div ref={containerRef} className="h-full w-full">
+        <div className="h-full w-full">
           <div
             ref={trackRef}
-            className="absolute top-1/2 -translate-y-1/2 flex gap-4 md:gap-8 will-change-transform px-4 md:px-8"
+            className="absolute top-1/2 -translate-y-1/2 flex gap-4 px-4 will-change-transform md:gap-8 md:px-8"
             style={{ left: 0 }}
           >
             {[
@@ -283,16 +254,7 @@ const ScrollGalleryPinned = () => {
               "/land22.jpg",
               "/eleven.jpg",
             ].map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Image ${i}`}
-                className="scroll-img"
-                style={{
-                  width: window.innerWidth < 768 ? "280px" : "400px",
-                  height: window.innerWidth < 768 ? "200px" : "300px"
-                }}
-              />
+              <img key={i} src={src} alt={`Image ${i}`} className="scroll-img" />
             ))}
           </div>
         </div>

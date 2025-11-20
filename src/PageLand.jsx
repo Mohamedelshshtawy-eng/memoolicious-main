@@ -145,10 +145,10 @@ const PageLand = () => {
       <div style={{ marginBottom: '0' }}> {/* إزالة أي margin إضافي */}
   <ScrollGalleryPinned/>
 </div>
-<section className='min-h-screen flex items-center bg-gradient-to-b from-black via-gray-900 to-black py-8 md:py-20' style={{ marginTop: '0' }}>
-   <ScrollVelocity 
-          texts={["🍴 FINE DINING", "👨‍🍳 MASTER CHEF", "🔥 FRESH & HOT", "⭐ MICHELIN STAR"]} 
-          className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 font-black"
+<section className='min-h-screen flex items-center bg-linear-to-b from-black via-gray-900 to-black py-20' style={{ marginTop: '0' }}>
+  <ScrollVelocity 
+         texts={["🍴 FINE DINING", "👨‍🍳 MASTER CHEF", "🔥 FRESH & HOT", "⭐ MICHELIN STAR"]} 
+         className="text-transparent bg-clip-text bg-linear-to-r from-amber-400 via-orange-500 to-red-500 font-black"
           velocity={50}
           numCopies={6}
           parallaxClassName="w-full py-6"
