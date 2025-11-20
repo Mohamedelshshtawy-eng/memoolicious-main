@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/SplitText";
@@ -34,7 +34,24 @@ const techLogos = [
 
 
 gsap.registerPlugin(useGSAP,SplitText);
+const heroImages = ["/two.jpg", "/three.jpg", "/four.jpg", "/five.jpg", "/six.jpg"];
+
 const PageLand = () => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const tl = gsap.timeline({ delay: 1 });
     tl.fromTo(
@@ -97,27 +114,17 @@ const PageLand = () => {
       duration:1,
       ease:"elastic.inOut"
     })
-  }, []);
+  }, [isMobile]);
 
   return (
     <>
       <div className="container">
         <div className="container-image">
-          <div className="img-img">
-            <img src="/two.jpg" alt="" />
-          </div>
-          <div className="img-img">
-            <img src="/three.jpg" alt="" />
-          </div>
-          <div className="img-img">
-            <img src="/four.jpg" alt="" />
-          </div>
-          <div className="img-img">
-            <img src="/five.jpg" alt="" />
-          </div>
-          <div className="img-img">
-            <img src="/six.jpg" alt="" />
-          </div>
+          {(isMobile ? heroImages.slice(0, 2) : heroImages).map((src, index) => (
+            <div className="img-img" key={`${src}-${index}`}>
+              <img src={src} alt="" />
+            </div>
+          ))}
         </div>
         <div className="h1">
           <h1 className="h1-h1">Welcome to Chef Memo</h1>
