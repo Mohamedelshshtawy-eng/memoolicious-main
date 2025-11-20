@@ -1,0 +1,14 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; 
+}
+
+/* style للـ velocity text */
+/* .custom-scroll-text {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+} */
