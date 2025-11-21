@@ -224,7 +224,7 @@ const PageLand = () => {
           )}
         </div>
         <div className="h1">
-          <h1 className="h1-h1">Welcome to Chef Memo</h1>
+          <h1 className="h1-h1">Welcome to Chef Aly</h1>
         </div>
         <div className="parg">
           <p className="p">
