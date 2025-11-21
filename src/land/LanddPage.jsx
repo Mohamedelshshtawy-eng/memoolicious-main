@@ -260,7 +260,7 @@ export default function Preloader() {
       </div>
 
       <div className="preloader-header">
-        <a href="#">Memolicious</a>
+        <a href="#">Chef Aly</a>
       </div>
 
       <section className="hero">
